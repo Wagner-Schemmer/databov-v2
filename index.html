@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataBov — Bem-Estar Animal Monitorado e Certificado</title>
+<meta name="description" content="Coleira inteligente com IA para Compost Barn e Freestall: cio no ponto, alertas de saúde e índice de bem-estar certificável de 1 a 5.">
+<meta property="og:title" content="DataBov — Bem-Estar Monitorado e Certificado">
+<meta property="og:description" content="Comportamento, saúde e conforto do rebanho 24h + certificação 1–5. Calcule seu retorno.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/databov-logo.png">
+<meta name="theme-color" content="#07130c">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Product","name":"DataBov","description":"Monitoramento comportamental e certificação de bem-estar animal.","brand":{"@type":"Brand","name":"DataBov"}}
+</script>
+</head>
+<body>
+<header class="nav" id="topo">
+  <div class="wrap nav-in">
+    <a class="brand" href="#topo"><img src="assets/databov-logo.png" alt="DataBov"></a>
+    <nav id="navLinks">
+      <a href="#solucao">Solução</a><a href="#roi">Retorno</a><a href="#certificacao">Certificação</a><a href="#planos">Planos</a><a href="#demo">Demo</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#contato">Solicitar demonstração</a>
+    <button class="menu" id="menuBtn" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker reveal">● Compost Barn &amp; Freestall</p>
+      <h1 class="reveal">Bem-estar monitorado e <em>certificado</em>, direto da coleira.</h1>
+      <p class="lede reveal">Sensores + IA acompanham cada animal 24h — cio no ponto, doença antes do sintoma e um <strong>índice de bem-estar de 1 a 5</strong> que cooperativa e frigorífico respeitam.</p>
+      <div class="cta-row reveal">
+        <a class="btn btn-primary" href="#contato">Solicitar demonstração</a>
+        <a class="btn btn-ghost" href="#roi">Calcular meu retorno ↓</a>
+      </div>
+      <div class="trust reveal"><span>✔ Sem obra no galpão</span><span>✔ Hardware de baixo custo</span><span>✔ Pronto p/ UE 2026</span></div>
+    </div>
+    <div class="dash reveal">
+      <div class="dash-head"><span class="dot"></span><span>DataBov · ao vivo</span><b id="dashClock">--:--</b></div>
+      <div class="score-row">
+        <div class="dial"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="dial-bg"/><circle id="dialArc" cx="60" cy="60" r="52" class="dial-fg"/><text x="60" y="68" id="dialNum">4.6</text></svg><small>bem-estar médio</small></div>
+        <div class="dash-stats"><div><b id="stRumin">7h42</b><span>ruminação/dia</span></div><div><b id="stAlert">2</b><span>alertas hoje</span></div><div><b id="stCio">1</b><span>cio detectado</span></div></div>
+      </div>
+      <canvas id="dashChart" width="640" height="180"></canvas>
+      <p class="dash-note">Simulação ilustrativa do painel do produtor.</p>
+    </div>
+  </div>
+  <div class="marquee"><div class="marquee-track"><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span></div></div>
+</section>
+
+<section id="solucao" class="section wrap">
+  <p class="kicker">A solução</p>
+  <h2>Comportamento vira dado. <em>Dado vira decisão.</em></h2>
+  <div class="grid3">
+    <article class="card reveal"><div class="ic">📡</div><h3>Coleira inteligente</h3><p>IMU 6 eixos + temperatura infravermelha sem contato, 24h no pescoço.</p></article>
+    <article class="card reveal"><div class="ic">🧠</div><h3>IA comportamental</h3><p>Ruminando, comendo, descansando, ativa ou em cio — comparado ao padrão do próprio animal.</p></article>
+    <article class="card reveal"><div class="ic">🏅</div><h3>Certificação 1–5</h3><p>Índice auditável em 4 domínios científicos para comprovar bem-estar.</p></article>
+  </div>
+</section>
+
+<section id="roi" class="section dark">
+  <div class="wrap">
+    <p class="kicker">Quanto volta pro bolso?</p>
+    <h2>Calculadora de <em>retorno</em></h2>
+    <div class="roi-grid">
+      <div class="roi-form">
+        <label>Vacas em lactação <b id="vN">120</b><input type="range" id="inN" min="20" max="2000" value="120"></label>
+        <label>Custo de um cio perdido (R$) <b id="vCio">R$ 380</b><input type="range" id="inCio" min="100" max="1200" step="10" value="380"></label>
+        <label>Cios perdidos / ano hoje <b id="vQ">14</b><input type="range" id="inQ" min="0" max="120" value="14"></label>
+        <label>Casos de doença tardia / ano <b id="vD">6</b><input type="range" id="inD" min="0" max="60" value="6"></label>
+        <label>Custo médio por caso (R$) <b id="vCd">R$ 900</b><input type="range" id="inCd" min="200" max="5000" step="50" value="900"></label>
+      </div>
+      <div class="roi-out">
+        <small>Prejuízo evitável estimado</small>
+        <p class="roi-val" id="roiVal">R$ 10.720/ano</p>
+        <p class="mut" id="roiDetail">8 cios recuperados + 4 casos antecipados</p>
+        <a class="btn btn-primary" href="#contato">Quero esse retorno →</a>
+        <p class="mut tiny">Estimativa conservadora (60% de aproveitamento). Simulação educativa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certificacao" class="section wrap">
+  <p class="kicker">Destaque</p>
+  <h2>O selo que nasce de <em>dado real</em></h2>
+  <div class="grid2">
+    <div class="card reveal"><h3>😌 Conforto</h3><p>Tempo de descanso (deitada) por dia.</p></div>
+    <div class="card reveal"><h3>🌾 Alimentação</h3><p>Tempo de ruminação por dia.</p></div>
+    <div class="card reveal"><h3>🩺 Saúde</h3><p>Atividade e marcha (claudicação).</p></div>
+    <div class="card reveal"><h3>🦋 Comportamento natural</h3><p>Ausência de padrões anômalos.</p></div>
+  </div>
+  <div class="scale reveal"><span>1 crítico</span><div class="scale-bar"><i style="width:86%"></i></div><span>5 excelente</span></div>
+</section>
+
+<section id="demo" class="section dark">
+  <div class="wrap">
+    <p class="kicker">Demonstração</p>
+    <h2>Sinta o <em>sinal</em> de cada comportamento</h2>
+    <div class="demo-btns" id="behavior-buttons">
+      <button class="chip on" data-behavior="ruminando">Ruminando</button>
+      <button class="chip" data-behavior="comendo">Comendo</button>
+      <button class="chip" data-behavior="andando">Andando</button>
+      <button class="chip" data-behavior="cio">Cio (monta)</button>
+      <button class="chip" data-behavior="repouso">Repouso</button>
+    </div>
+    <canvas id="accel-chart" width="900" height="220"></canvas>
+    <div class="demo-meta"><span>Estado: <b id="current-behavior">ruminando</b></span><span>Freq: <b id="dominant-freq">~0,9 Hz</b></span><span>Energia: <b id="signal-energy">baixa</b></span><span>Alerta: <b id="alert-state">nenhum</b></span></div>
+  </div>
+</section>
+
+<section id="planos" class="section wrap">
+  <p class="kicker">Modelo de acesso</p>
+  <h2>Comece pelo <em>piloto</em></h2>
+  <div class="grid3">
+    <article class="card plan reveal"><h3>📦 Hardware</h3><p>Coleira DataBov por animal. Instalação assistida no galpão.</p></article>
+    <article class="card plan featured reveal"><span class="flag">Recomendado</span><h3>🔁 Assinatura</h3><p>Dashboard, alertas realtime e relatórios mensais por animal.</p></article>
+    <article class="card plan reveal"><h3>🏅 Certificação</h3><p>Relatório de bem-estar para compliance e exportação.</p></article>
+  </div>
+  <p class="center"><a class="btn btn-primary" href="#contato">Pedir proposta para minha fazenda</a></p>
+</section>
+
+<section id="contato" class="section dark">
+  <div class="wrap split">
+    <div>
+      <p class="kicker">Contato</p>
+      <h2>Veja na <em>sua fazenda</em></h2>
+      <p>Deixe seus dados e receba uma demonstração com números do seu rebanho. Sem compromisso.</p>
+      <ul class="ticks"><li>✔ Resposta em até 1 dia útil</li><li>✔ Piloto em Compost Barn e Freestall</li><li>✔ Sem fidelidade abusiva</li></ul>
+    </div>
+    <form id="leadForm" class="lead">
+      <input id="lNome" placeholder="Seu nome" maxlength="80" required>
+      <input id="lEmail" type="email" placeholder="E-mail profissional" maxlength="120" required>
+      <input id="lWa" inputmode="numeric" placeholder="WhatsApp (só números)" maxlength="20" required>
+      <div class="row2">
+        <select id="lPerfil"><option value="produtor">Sou produtor</option><option value="cooperativa">Cooperativa</option><option value="frigorifico">Frigorífico/exportador</option><option value="pesquisa">Pesquisa/universidade</option></select>
+        <input id="lRebanho" type="number" min="0" placeholder="Nº animais">
+      </div>
+      <button class="btn btn-primary" type="submit">Quero uma demonstração →</button>
+      <p class="mut" id="leadMsg"></p>
+    </form>
+  </div>
+</section>
+
+<section class="section wrap">
+  <p class="kicker">Dúvidas</p>
+  <h2>Perguntas frequentes</h2>
+  <details open><summary>Precisa de obra ou internet nova no galpão?</summary><p>Não. A estação base usa a rede elétrica existente e Wi-Fi/BLE do local.</p></details>
+  <details><summary>Funciona em pasto aberto?</summary><p>O DataBov foi desenhado para confinamento (Compost Barn e Freestall). Pasto aberto está no roadmap.</p></details>
+  <details><summary>A certificação vale para exportação?</summary><p>O índice segue literatura científica e é calibrado com observador treinado, pronto para processos de compliance como o europeu.</p></details>
+  <details><summary>Qual o custo?</summary><p>Hardware por animal + assinatura mensal. Peça uma proposta com os números da sua fazenda. ↑</p></details>
+</section>
+</main>
+
+<footer><div class="wrap foot">
+  <span>🐄 <strong>DataBov</strong> — bem-estar monitorado e certificado.</span>
+  <span><a href="#topo">Topo ↑</a> · Feito por <a href="https://instagram.com/wagner_0ficial_" target="_blank" rel="noopener">@wagner_0ficial_</a></span>
+</div></footer>
+
+<a class="float-wa" id="floatWa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp">✆<span class="tip">Fale com a DataBov</span></a>
+<div id="toast"></div>
+<script src="supabase-config.js"></script>
+<script src="js/db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

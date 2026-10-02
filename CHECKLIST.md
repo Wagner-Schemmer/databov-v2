@@ -1,0 +1,11 @@
+# Base Profissional — checklist (todo projeto novo)
+- [ ] 1. FRONTEND — responsivo, mobile-first, sem erro no console
+- [ ] 2. APIs & BACKEND — endpoints documentados, validação de entrada
+- [ ] 3. DATABASE & STORAGE — schema SQL versionado + RLS ligado
+- [ ] 4. IA & AUTOMAÇÕES — só se agrega valor real (nada de enfeite)
+- [ ] 5. AUTH & PERMISSIONS — login real p/ área admin; anon nunca edita/apaga
+- [ ] 6. DEPLOY & CLOUD — Vercel prod + domínio + SSL + preview por PR
+- [ ] 7. CI/CD & VERSIONAMENTO — commits pequenos, push espelha prod
+- [ ] 8. MONITORING & LOGS — /health ou status + mensagens de erro amigáveis
+- [ ] 9. SCALING & COSTS — checar limites do plano free (Supabase/Vercel)
+- [ ] 10. PRODUTO REAL — 1 usuário real testou de ponta a ponta
