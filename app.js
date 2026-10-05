@@ -2,12 +2,16 @@
 const $ = id => document.getElementById(id);
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600); }
 
-// menu mobile + reveal + relógio
+// menu mobile + reveal + relógio + barra de progresso
 $("menuBtn").onclick = () => $("navLinks").classList.toggle("open");
 $("navLinks").querySelectorAll("a").forEach(a => a.onclick = () => $("navLinks").classList.remove("open"));
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } }), { threshold: .12 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 setInterval(() => { $("dashClock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); }, 1000);
+addEventListener("scroll", () => {
+  const h = document.documentElement;
+  $("pbar").style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+}, { passive: true });
 
 // ---------- ROI ----------
 const BRL = v => "R$ " + Math.round(v).toLocaleString("pt-BR");
