@@ -45,7 +45,9 @@ async function load() {
   const { data, error } = await sb.from("leituras").select("*").order("criado_em", { ascending: false }).limit(30);
   if (error || !data.length) { document.getElementById("connMsg").textContent = "sem dados ainda — ligue a coleira"; return; }
   const last = data[data.length - 1];
-  document.getElementById("connMsg").textContent = ` receiving · ${data[0].device}`;
+  const cm = document.getElementById("connMsg");
+  cm.dataset.live = "1"; cm.dataset.dev = data[0].device;
+  cm.textContent = `receiving · ${data[0].device} · há 0s`;
   document.getElementById("kOdb").textContent = (+last.odba).toFixed(3);
   document.getElementById("kHr").textContent = last.hr_max || "—";
   document.getElementById("kBe").textContent = last.bem_estar + "/5";
@@ -62,7 +64,13 @@ async function load() {
 }
 load();
 sb.channel("leituras").on("postgres_changes", { event: "INSERT", schema: "public", table: "leituras" }, load).subscribe();
-setInterval(() => { if (!document.hidden) load(); }, 30000);
+setInterval(() => { if (!document.hidden) load(); }, 10000);
+setInterval(() => {
+  const el = document.getElementById("connMsg");
+  const m = el.textContent.match(/· há (\d+)s/);
+  const s = m ? +m[1] + 1 : 0;
+  if (el.dataset.live === "1") el.innerHTML = `receiving · ${el.dataset.dev} · há ${s}s`;
+}, 1000);
 </script>
 </body>
 </html>
