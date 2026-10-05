@@ -1,2 +1,7 @@
-// Cole URL + anonKey do Supabase (Project Settings → API)
-window.APP_CONFIG = { supabase: { url: "", anonKey: "" } };
+// DataBov v2 — Supabase (mesmo projeto do mural; chaves públicas)
+window.APP_CONFIG = {
+  supabase: {
+    url: "https://bjzyrzpilrvolycbdeyk.supabase.co",
+    anonKey: "sb_publishable_9Vr4s6HGBILeHTe8qHRh-A_RMtgE1hd"
+  }
+};

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ao vivo — DataBov</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07130c">
+<link rel="stylesheet" href="styles.css">
+<style>
+.live-dot{width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 12px var(--green);animation:blink 1.6s infinite}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi b{display:block;font-size:1.7rem;font-family:'Archivo'}.kpi span{font-size:.78rem;color:var(--mut)}
+#liveChart{width:100%;height:240px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.feed{display:grid;gap:8px;margin-top:16px}
+.feed div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:.88rem}
+@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="index.html"><img src="assets/databov-logo.png" alt="DataBov"></a>
+  <span class="mut">· dashboard ao vivo</span>
+</div></header>
+<main class="wrap section">
+  <p><span class="live-dot"></span> <strong id="connMsg">conectando…</strong></p>
+  <div class="cards">
+    <div class="kpi"><b id="kOdb">—</b><span>atividade (ODBA)</span></div>
+    <div class="kpi"><b id="kHr">—</b><span>HR máx (bpm)</span></div>
+    <div class="kpi"><b id="kBe">—</b><span>bem-estar /5</span></div>
+    <div class="kpi"><b id="kWhen">—</b><span>última leitura</span></div>
+  </div>
+  <canvas id="liveChart" width="900" height="240"></canvas>
+  <h3>Últimas leituras</h3>
+  <div class="feed" id="feed"></div>
+</main>
+<script src="supabase-config.js"></script>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const cfg = (window.APP_CONFIG && window.APP_CONFIG.supabase) || {};
+const sb = createClient(cfg.url, cfg.anonKey);
+const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;");
+async function load() {
+  const { data, error } = await sb.from("leituras").select("*").order("criado_em", { ascending: false }).limit(30);
+  if (error || !data.length) { document.getElementById("connMsg").textContent = "sem dados ainda — ligue a coleira"; return; }
+  const last = data[data.length - 1];
+  document.getElementById("connMsg").textContent = ` receiving · ${data[0].device}`;
+  document.getElementById("kOdb").textContent = (+last.odba).toFixed(3);
+  document.getElementById("kHr").textContent = last.hr_max || "—";
+  document.getElementById("kBe").textContent = last.bem_estar + "/5";
+  document.getElementById("kWhen").textContent = new Date(data[0].criado_em).toLocaleTimeString("pt-BR");
+  const cv = document.getElementById("liveChart"), ctx = cv.getContext("2d");
+  const pts = [...data].reverse();
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const max = Math.max(.2, ...pts.map(p => +p.odba));
+  ctx.strokeStyle = "#c8f04a"; ctx.lineWidth = 2; ctx.beginPath();
+  pts.forEach((p, i) => { const x = i / (pts.length - 1 || 1) * cv.width, y = cv.height - 20 - (+p.odba / max) * (cv.height - 50); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+  ctx.stroke();
+  document.getElementById("feed").innerHTML = data.slice(0, 8).map(p =>
+    `<div>🐄 <b>${esc(p.device)}</b> · odba ${(+p.odba).toFixed(3)} · HR ${p.hr_max || "—"} · bem-estar ${p.bem_estar}/5 · ${new Date(p.criado_em).toLocaleTimeString("pt-BR")}</div>`).join("");
+}
+load();
+sb.channel("leituras").on("postgres_changes", { event: "INSERT", schema: "public", table: "leituras" }, load).subscribe();
+setInterval(() => { if (!document.hidden) load(); }, 30000);
+</script>
+</body>
+</html>
