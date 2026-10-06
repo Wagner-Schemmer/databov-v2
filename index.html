@@ -65,6 +65,27 @@
   <div class="marquee"><div class="marquee-track"><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span></div></div>
 </section>
 
+<section id="coleira3d" class="section dark">
+  <div class="wrap">
+    <p class="kicker">Por dentro da coleira</p>
+    <h2>Um sensor. <em>Todos os ângulos.</em></h2>
+    <p class="mut">Arraste para girar — a rolagem também gira. Toque nos passos:</p>
+    <div class="demo-btns" id="collarSteps">
+      <button class="chip on">1 · Sensor</button>
+      <button class="chip">2 · Inteligência</button>
+      <button class="chip">3 · Alerta</button>
+      <button class="chip">4 · Certificação</button>
+    </div>
+    <canvas id="collar3d"></canvas>
+    <div class="card" id="collarCard"><h3 id="stepTitle">1 · Sensor</h3><p id="stepDesc"></p></div>
+    <div class="grid3" id="collarFallback" style="display:none">
+      <div class="card"><h3>1 · Sensor</h3><p>IMU 6 eixos + temperatura infravermelha, 24h no pescoço.</p></div>
+      <div class="card"><h3>2 · Inteligência</h3><p>Classifica comportamento no padrão do próprio animal.</p></div>
+      <div class="card"><h3>3 · Alerta</h3><p>Cio, doença e estresse no dashboard e celular.</p></div>
+      <div class="card"><h3>4 · Certificação</h3><p>Índice 1–5 auditável para o mercado.</p></div>
+    </div>
+  </div>
+</section>
 <section id="solucao" class="section wrap">
   <p class="kicker">A solução</p>
   <h2>Comportamento vira dado. <em>Dado vira decisão.</em></h2>
@@ -186,5 +207,6 @@
 <script src="supabase-config.js"></script>
 <script src="js/db.js"></script>
 <script src="app.js"></script>
+<script src="js/collar3d.js"></script>
 </body>
 </html>
