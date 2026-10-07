@@ -100,8 +100,7 @@ h2{font-size:clamp(1.6rem,3.6vw,2.4rem)}
 .lead input,.lead select{width:100%;border:2px solid #e2e8f0;border-radius:12px;padding:12px;font-size:1rem;font-family:inherit}
 .lead input:focus,.lead select:focus{outline:3px solid var(--lime)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.rowddd{display:grid;grid-template-columns:110px 1fr;gap:12px}
-.rowddd select{border:2px solid #e2e8f0;border-radius:12px;padding:12px;font-size:1rem;font-family:inherit;font-weight:700;background:#fff}
+.hint-ex{display:block;font-size:.78rem;color:#64748b;margin:-6px 0 2px}
 .lead .mut{color:#64748b;font-size:.85rem}
 /* faq */
 details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 20px;margin:10px 0}

@@ -98,13 +98,13 @@ roi();
 $("leadForm").addEventListener("submit", async e => {
   e.preventDefault();
   const nome = $("lNome").value.trim(), email = $("lEmail").value.trim();
-  const ddd = $("lDDD").value;
-  const numero = $("lWa").value.replace(/\D/g, "");
-  const whatsapp = "55" + ddd + numero;
+  let numero = $("lWa").value.replace(/\D/g, "");
+  if (!numero.startsWith("55")) numero = "55" + numero; // 55 = Brasil
+  const whatsapp = numero;
   const perfil = $("lPerfil").value;
   const rebanho = +$("lRebanho").value || 0;
   if (nome.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("leadMsg").textContent = "Confere nome e e-mail."; return; }
-  if (numero.length < 8 || numero.length > 9) { $("leadMsg").textContent = "Confere o número (8 ou 9 dígitos)."; return; }
+  if (numero.length < 12 || numero.length > 13) { $("leadMsg").textContent = "Confere o número com DDD (ex: 5599702586)."; return; }
   const cfg = (window.APP_CONFIG && window.APP_CONFIG.supabase) || {};
   const done = () => { $("leadMsg").textContent = "Recebido! Falamos em até 1 dia útil. ✔"; e.target.reset(); toast("Demonstração solicitada!"); };
   if (!cfg.url || !cfg.anonKey) return waFallback();
