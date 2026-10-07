@@ -3,13 +3,13 @@ const $ = id => document.getElementById(id);
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600); }
 
 // menu mobile + reveal + relógio + barra de progresso + voltar ao topo
-document.querySelectorAll('a[href="#topo"]').forEach((a) => {
+document.querySelectorAll('a[href="#topo"],#toTop').forEach((a) => {
   a.addEventListener("click", (e) => {
-    const el = document.getElementById("topo");
+    const el = document.getElementById("inicio") || document.getElementById("topo");
     if (!el) return;
     e.preventDefault();
     try {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
     } catch {
       window.scrollTo(0, 0);
     }
