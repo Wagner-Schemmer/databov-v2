@@ -6,7 +6,7 @@
 <title>Dashboard ao vivo — DataBov</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#07130c">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=3">
 <style>
 .live-dot{width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 12px var(--green);animation:blink 1.6s infinite}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
@@ -35,7 +35,7 @@
   <h3>Últimas leituras</h3>
   <div class="feed" id="feed"></div>
 </main>
-<script src="supabase-config.js"></script>
+<script src="supabase-config.js?v=3"></script>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 const cfg = (window.APP_CONFIG && window.APP_CONFIG.supabase) || {};
