@@ -2,7 +2,19 @@
 const $ = id => document.getElementById(id);
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600); }
 
-// menu mobile + reveal + relógio + barra de progresso
+// menu mobile + reveal + relógio + barra de progresso + voltar ao topo
+document.querySelectorAll('a[href="#topo"]').forEach((a) => {
+  a.addEventListener("click", (e) => {
+    const el = document.getElementById("topo");
+    if (!el) return;
+    e.preventDefault();
+    try {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {
+      window.scrollTo(0, 0);
+    }
+  });
+});
 $("menuBtn").onclick = () => $("navLinks").classList.toggle("open");
 $("navLinks").querySelectorAll("a").forEach(a => a.onclick = () => $("navLinks").classList.remove("open"));
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } }), { threshold: .12 });
