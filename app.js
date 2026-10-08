@@ -3,6 +3,39 @@ const $ = id => document.getElementById(id);
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600); }
 
 // menu mobile + reveal + relógio + barra de progresso + voltar ao topo
+// ---- busca glassy (filtra seções, Enter navega, ESC fecha) ----
+(function () {
+  const btn = $("searchBtn"), box = $("searchBox"), list = $("searchList");
+  const targets = [...document.querySelectorAll("section[id]")].map(s => {
+    const h = s.querySelector("h1,h2");
+    return { id: s.id, label: h ? h.textContent.trim().slice(0, 32) : s.id };
+  });
+  let hot = -1, shown = [];
+  function close() { box.classList.remove("open"); list.classList.remove("open"); box.value = ""; hot = -1; }
+  btn.onclick = e => {
+    e.stopPropagation();
+    const open = box.classList.toggle("open");
+    list.classList.remove("open");
+    if (open) box.focus(); else box.value = "";
+  };
+  document.addEventListener("click", e => { if (!document.getElementById("searchGo").contains(e.target)) close(); });
+  box.addEventListener("input", () => {
+    const q = box.value.trim().toLowerCase();
+    shown = targets.filter(t => t.label.toLowerCase().includes(q)).slice(0, 6);
+    hot = shown.length ? 0 : -1;
+    list.innerHTML = shown.map((t, i) => `<a href="#${t.id}" data-i="${i}" class="${i === 0 ? "hot" : ""}">→ ${t.label}</a>`).join("");
+    list.classList.toggle("open", shown.length > 0);
+  });
+  box.addEventListener("keydown", e => {
+    if (e.key === "Escape") { close(); box.blur(); }
+    if (e.key === "ArrowDown" && shown.length) { hot = (hot + 1) % shown.length; paint(); e.preventDefault(); }
+    if (e.key === "ArrowUp" && shown.length) { hot = (hot - 1 + shown.length) % shown.length; paint(); e.preventDefault(); }
+    if (e.key === "Enter" && hot >= 0) go(shown[hot].id);
+  });
+  function paint() { list.querySelectorAll("a").forEach(a => a.classList.toggle("hot", +a.dataset.i === hot)); }
+  function go(id) { close(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
+  list.addEventListener("click", e => { const a = e.target.closest("a"); if (a) { e.preventDefault(); go(a.getAttribute("href").slice(1)); } });
+})();
 document.querySelectorAll('a[href="#topo"],#toTop').forEach((a) => {
   a.addEventListener("click", (e) => {
     const el = document.getElementById("inicio") || document.getElementById("topo");
