@@ -40,27 +40,47 @@ function roi() {
 ["inN", "inCio", "inQ", "inD", "inCd"].forEach(id => $(id).addEventListener("input", roi));
 roi();
 
-// ---------- Dashboard mock: dial + chart animado ----------
+// ---------- Dashboard mock: dial + chart animado (nota simulável) ----------
 (function () {
   const arc = $("dialArc"), C = 327;
-  let s = 0; const target = 4.6 / 5;
-  const t = setInterval(() => { s += .02; if (s >= target) { s = target; clearInterval(t); }
-    arc.style.strokeDashoffset = C * (1 - s); $("dialNum").textContent = (s * 5).toFixed(1); }, 40);
+  let shown = 4.6, target = 4.6;
+  // regime do gráfico conforme a nota: nota baixa = instável, com picos
+  const regime = s => ({ spikeP: Math.max(.01, (5 - s) * .09), base: .7 + s * .12, jitter: .25 + (5 - s) * .3 });
+  let R = regime(target);
+  $("simScore").addEventListener("input", e => {
+    target = +e.target.value;
+    $("simVal").textContent = target.toFixed(1);
+    R = regime(target);
+    // stats reagem: mais alertas e menos ruminação com nota baixa
+    const alerts = Math.round((5 - target) * 2.4);
+    $("stAlert").textContent = alerts;
+    const h = Math.floor(4 + target * .8), m = Math.floor((target * 47) % 60);
+    $("stRumin").textContent = `${h}h${String(m).padStart(2, "0")}`;
+  });
+  setInterval(() => {
+    shown += (target - shown) * .08;
+    arc.style.strokeDashoffset = C * (1 - shown / 5);
+    $("dialNum").textContent = shown.toFixed(1);
+    arc.style.stroke = shown >= 4 ? "var(--lime)" : shown >= 2.5 ? "var(--amber)" : "var(--red)";
+  }, 50);
   const cv = $("dashChart"), ctx = cv.getContext("2d");
   const data = Array(90).fill(1);
   function frame() {
     data.shift();
     const r = Math.random();
-    data.push(1 + Math.sin(Date.now() / 900) * .5 + (r > .93 ? 1.6 : r * .4));
+    const spike = r < R.spikeP ? 1.4 + Math.random() : 0;
+    data.push(R.base + Math.sin(Date.now() / 900) * .4 + (Math.random() - .5) * R.jitter + spike);
     ctx.clearRect(0, 0, cv.width, cv.height);
     ctx.strokeStyle = "#1d3a28"; ctx.beginPath(); ctx.moveTo(0, 60); ctx.lineTo(cv.width, 60); ctx.stroke();
     ctx.strokeStyle = "#c8f04a"; ctx.lineWidth = 2; ctx.beginPath();
-    data.forEach((v, i) => { const x = i / (data.length - 1) * cv.width, y = 150 - v * 38; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    data.forEach((v, i) => { const x = i / (data.length - 1) * cv.width, y = 155 - Math.min(v / 3.4, 1) * 135; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
     ctx.stroke(); ctx.lineWidth = 1;
     requestAnimationFrame(frame);
   }
   frame();
 })();
+
+// ---------- Demo acelerômetro ----------
 
 // ---------- Demo acelerômetro ----------
 (function () {
