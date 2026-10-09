@@ -141,8 +141,8 @@ footer{border-top:1px solid var(--line);padding:26px 0}
   .nav-in{gap:12px}
   .nav-in .btn-sm{margin-left:auto}
   #navLinks{display:none;position:absolute;top:70px;left:12px;right:12px;background:#0d2114;flex-direction:column;padding:8px;border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.5);gap:0;overflow:hidden}
-  #navLinks.open{display:flex;animation:drop .25s cubic-bezier(.23,1,.32,1)}
-  #navLinks a{padding:14px 16px;border-bottom:1px solid var(--line);font-size:1rem}
+  #navLinks.open{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;animation:drop .25s cubic-bezier(.23,1,.32,1)}
+  #navLinks a{padding:12px 14px;border-bottom:0;font-size:.92rem;white-space:nowrap}
   #navLinks a:last-child{border-bottom:0}
   #navLinks a:hover{background:rgba(200,240,74,.08)}
   @keyframes drop{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
