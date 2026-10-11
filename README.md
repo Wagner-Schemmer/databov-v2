@@ -27,6 +27,24 @@ Sensores + IA acompanham cada animal 24h e viram um **índice de bem-estar de 1 
 | 🐄 Coleira 3D | Wemos + MPU6050 + MAX30102 em Three.js |
 | 📝 Leads | formulário → Supabase + WhatsApp pronto |
 
+## Cenas do espetáculo
+
+**Ato III, cena 1 — a calculadora (R$ 6.640/ano na tela):**
+<a href="https://databov-v2.vercel.app"><img src="docs/dbv2-roi.png" alt="calculadora de ROI" /></a>
+
+**Ato III, cena 2 — o sinal de cada comportamento:**
+<a href="https://databov-v2.vercel.app"><img src="docs/dbv2-sinal.png" alt="demo de comportamento" /></a>
+
+## Roteiro técnico (como a mágica funciona)
+
+```mermaid
+flowchart LR
+    C[Coleira<br/>ESP8266 + MPU + MAX30102] -->|MQTT / HTTPS| S[(Supabase<br/>leituras)]
+    S -->|Realtime| D[Dashboard do produtor]
+    S --> L[Leads]
+    D --> P[Decisão no curral]
+```
+
 ## Bastidores
 
 `index.html` (o palco) · `dashboard.html` (o painel) · `app.js` + `styles.css` (luz e som) · `js/collar3d.js` (o adereço) · `supabase-*` (o banco) · `api/health.js` (o ponto).
@@ -38,6 +56,10 @@ cd databov-v2 && python3 -m http.server
 ```
 
 WhatsApp comercial em `whatsapp_comercial`. Deploy: `vercel deploy --prod --yes`.
+
+## Bilheteria (star history)
+
+<a href="https://www.star-history.com/#Wagner-Schemmer/databov-v2&Date"><img alt="Star History" src="https://api.star-history.com/svg?repos=Wagner-Schemmer/databov-v2&type=Date" /></a>
 
 ## Elenco de apoio
 
