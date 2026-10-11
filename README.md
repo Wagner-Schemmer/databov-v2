@@ -57,10 +57,6 @@ cd databov-v2 && python3 -m http.server
 
 WhatsApp comercial em `whatsapp_comercial`. Deploy: `vercel deploy --prod --yes`.
 
-## Bilheteria (star history)
-
-<a href="https://www.star-history.com/#Wagner-Schemmer/databov-v2&Date"><img alt="Star History" src="https://api.star-history.com/svg?repos=Wagner-Schemmer/databov-v2&type=Date" /></a>
-
 ## Elenco de apoio
 
 Firmware da coleira: [`rebanho-vivo-backend`](https://github.com/Wagner-Schemmer/rebanho-vivo-backend) · Versão original: [`monitoramento-animal-site`](https://github.com/Wagner-Schemmer/monitoramento-animal-site)
