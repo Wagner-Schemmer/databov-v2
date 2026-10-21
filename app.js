@@ -183,12 +183,14 @@ $("leadForm").addEventListener("submit", async e => {
   const num = "5555997302586";
   $("floatWa").href = `https://wa.me/${num}?text=${encodeURIComponent("Olá! Quero uma demonstração DataBov.")}`;
   if (!cfg.url) return;
-  fetch(`${cfg.url}/rest/v1/app_config?select=chave,valor`, { headers: { apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey } })
+  // site_config é a tabela de configuração do projeto (chave/valor).
+  // a chave do DataBov é "whatsapp_databov"; sem ela, vale o número padrão acima.
+  fetch(`${cfg.url}/rest/v1/site_config?select=chave,valor&chave=eq.whatsapp_databov`, { headers: { apikey: cfg.anonKey, Authorization: "Bearer " + cfg.anonKey } })
     .then(r => r.json()).then(rows => {
       if (!Array.isArray(rows)) return;
       const c = Object.fromEntries(rows.map(r => [r.chave, r.valor]));
-      if (/^\d{10,13}$/.test(c.whatsapp_comercial || "")) {
-        $("floatWa").href = `https://wa.me/${c.whatsapp_comercial}?text=${encodeURIComponent("Olá! Quero uma demonstração DataBov.")}`;
+      if (/^\d{10,13}$/.test(c.whatsapp_databov || "")) {
+        $("floatWa").href = `https://wa.me/${c.whatsapp_databov}?text=${encodeURIComponent("Olá! Quero uma demonstração DataBov.")}`;
       }
     }).catch(() => {});
 })();

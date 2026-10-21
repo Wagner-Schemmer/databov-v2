@@ -20,3 +20,11 @@ insert into app_config (chave, valor) values
   ('whatsapp_comercial', '5555997302586'),
   ('email_comercial', 'wagner.schemmer.martins1@gmail.com')
 on conflict (chave) do nothing;
+
+-- O site (app.js) lê a tabela `site_config` (chave/valor), compartilhada com o
+-- projeto da Bárbara. A chave do DataBov é `whatsapp_databov`.
+-- Sem essa chave, o site usa o número padrão 5555997302586 definido no app.js.
+-- Para configurar pelo SQL Editor:
+--   insert into site_config (chave, valor)
+--   values ('whatsapp_databov', '5555997302586')
+--   on conflict (chave) do update set valor = excluded.valor;
