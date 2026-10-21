@@ -114,32 +114,65 @@
     bateria.rotation.set(-.1, .2, .04);
     root.add(bateria);
 
-    // ---------- 4. FITA RETA + FIVELA ----------
-    // A fita é uma faixa plana e reta (poucos polígonos) atravessando a caixa,
-    // igual ao produto físico: entra por um lado, sai pelo outro.
+    // ---------- 4. FITA (nylon) + FIVELA ----------
+    // Fita em arco suave como na peça real: sai da caixa, contorna e volta até
+    // a fivela. Curva com poucos segmentos (28) — arco bonito sem pesar a malha.
     const fita = new THREE.Group();
     const webbing = std(0x1b1b1b, .88, .03);
-    const FAIXA_W = 1.25, FAIXA_T = .11;   // 25mm x 2mm na escala do modelo
-    function faixa(x0, x1, y, z, ry) {
-      const m = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(x1 - x0), FAIXA_W, FAIXA_T), webbing);
-      m.position.set((x0 + x1) / 2, y, z);
-      m.rotation.z = ry;
-      return m;
+    const FAIXA_W = 1.25, FAIXA_T = .1;   // 25mm x 2mm na escala do modelo
+
+    function ribbon(pts, largura, espess, N) {
+      const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
+      const pos = [], idx = [];
+      const up = new THREE.Vector3(0, 1, 0);
+      for (let i = 0; i <= N; i++) {
+        const p = curve.getPoint(i / N);
+        const tan = curve.getTangent(i / N).normalize();
+        let right = new THREE.Vector3().crossVectors(tan, up);
+        if (right.lengthSq() < 1e-6) right.set(1, 0, 0);
+        right.normalize();
+        const rUp = new THREE.Vector3().crossVectors(right, tan).normalize();
+        const c = [
+          p.clone().addScaledVector(right, largura / 2).addScaledVector(rUp, espess / 2),
+          p.clone().addScaledVector(right, largura / 2).addScaledVector(rUp, -espess / 2),
+          p.clone().addScaledVector(right, -largura / 2).addScaledVector(rUp, -espess / 2),
+          p.clone().addScaledVector(right, -largura / 2).addScaledVector(rUp, espess / 2),
+        ];
+        for (const v of c) pos.push(v.x, v.y, v.z);
+      }
+      for (let i = 0; i < N; i++) {
+        const a = i * 4, b = (i + 1) * 4;
+        for (let k = 0; k < 4; k++) {
+          const k2 = (k + 1) % 4;
+          idx.push(a + k, b + k, a + k2, a + k2, b + k, b + k2);
+        }
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
     }
-    // lado esquerdo
-    fita.add(faixa(-4.1, -1.75, -.55, 0, .05));
-    // lado direito (mais curto, termina na fivela)
-    fita.add(faixa(1.75, 3.35, -.55, 0, -.04));
-    // fivela de liberação rápida
+
+    // cinta longa: sai da esquerda, contorna e vem até a fivela
+    fita.add(new THREE.Mesh(ribbon([
+      [-1.9, -.6, 0], [-2.9, -.85, .3], [-3.3, .3, .28], [-2.7, 1.35, .05],
+      [-1.5, 1.95, -.18], [.2, 2.05, -.25], [1.5, 1.8, -.2],
+    ], FAIXA_W, FAIXA_T, 28), webbing));
+    // cinta curta: da direita até a fivela
+    fita.add(new THREE.Mesh(ribbon([
+      [1.9, -.6, 0], [2.6, -.5, .26], [2.85, .45, .2], [2.35, 1.25, -.08], [1.85, 1.72, -.18],
+    ], FAIXA_W, FAIXA_T, 20), webbing));
+    // fivela de liberação rápida (pequena, onde as duas cintas se unem)
     const fivela = new THREE.Group();
-    const corpoFiv = new THREE.Mesh(roundedBox(.9, 1.45, .34, .12, .05), std(0x242424, .65, .1));
+    const corpoFiv = new THREE.Mesh(roundedBox(.82, .62, .3, .08, .035), std(0x232323, .62, .1));
     fivela.add(corpoFiv);
-    const fenda = new THREE.Mesh(new THREE.BoxGeometry(.95, .3, .38), std(0x000000, 1, 0));
-    fenda.position.y = -.1; fivela.add(fenda);
-    const trava = new THREE.Mesh(roundedBox(.5, .5, .3, .08, .03), std(0x2e2e2e, .6, .12));
-    trava.position.set(.18, .35, .04); fivela.add(trava);
-    fivela.position.set(3.7, -.55, 0);
-    fivela.rotation.set(0, 0, -.04);
+    const fenda = new THREE.Mesh(new THREE.BoxGeometry(.86, .14, .34), std(0x000000, 1, 0));
+    fenda.position.y = .04; fivela.add(fenda);
+    const trava = new THREE.Mesh(roundedBox(.4, .44, .27, .06, .025), std(0x2c2c2c, .58, .12));
+    trava.position.set(-.42, 0, 0); fivela.add(trava);
+    fivela.position.set(1.7, 1.78, -.2);
+    fivela.rotation.set(.1, -.22, .3);
     fita.add(fivela);
     fita.rotation.set(-.05, 0, 0);
     root.add(fita);
