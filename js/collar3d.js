@@ -9,10 +9,9 @@
   const STEPS = [
     ["Caixa", "Impressa em 3D, preta, fechada contra poeira e água. Logo DataBov de alta visibilidade no campo."],
     ["Sensores", "MPU6050 (IMU 6 eixos) e MAX30102 (oximetria e frequência cardíaca) no mesmo barramento I2C. A radiografia mostra o interior."],
-    ["Fita e fivela", "Fita de nylon 25mm com fivela de liberação rápida: coloca e tira em segundos, ajuste na hora no curral."],
     ["Bateria", "Duas células 18650 em paralelo (1S2P) com carregador TP4056 — dias de autonomia sem recarregar."],
   ];
-  const CHIP_TXT = ["1 · Caixa", "2 · Sensores", "3 · Fita e fivela", "4 · Bateria"];
+  const CHIP_TXT = ["1 · Caixa", "2 · Sensores", "3 · Bateria"];
   function showStep(i) {
     chips.forEach((c, j) => { c.classList.toggle("on", j === i); c.textContent = CHIP_TXT[j]; });
     title.textContent = (i + 1) + " · " + STEPS[i][0];
@@ -25,8 +24,8 @@
     const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(42, 1, .1, 100);
-    cam.position.set(0, .7, 6.8);
-    cam.lookAt(0, -.2, 0);
+    cam.position.set(0, .3, 4.3);
+    cam.lookAt(0, .05, 0);
     const renderer = new THREE.WebGLRenderer({ canvas: mount, alpha: true, antialias: true });
     const root = new THREE.Group();
     scene.add(root);
@@ -114,69 +113,6 @@
     bateria.rotation.set(-.1, .2, .04);
     root.add(bateria);
 
-    // ---------- 4. FITA (nylon) + FIVELA ----------
-    // Fita em arco suave como na peça real: sai da caixa, contorna e volta até
-    // a fivela. Curva com poucos segmentos (28) — arco bonito sem pesar a malha.
-    const fita = new THREE.Group();
-    const webbing = std(0x1b1b1b, .88, .03);
-    const FAIXA_W = 1.25, FAIXA_T = .1;   // 25mm x 2mm na escala do modelo
-
-    function ribbon(pts, largura, espess, N) {
-      const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
-      const pos = [], idx = [];
-      const up = new THREE.Vector3(0, 1, 0);
-      for (let i = 0; i <= N; i++) {
-        const p = curve.getPoint(i / N);
-        const tan = curve.getTangent(i / N).normalize();
-        let right = new THREE.Vector3().crossVectors(tan, up);
-        if (right.lengthSq() < 1e-6) right.set(1, 0, 0);
-        right.normalize();
-        const rUp = new THREE.Vector3().crossVectors(right, tan).normalize();
-        const c = [
-          p.clone().addScaledVector(right, largura / 2).addScaledVector(rUp, espess / 2),
-          p.clone().addScaledVector(right, largura / 2).addScaledVector(rUp, -espess / 2),
-          p.clone().addScaledVector(right, -largura / 2).addScaledVector(rUp, -espess / 2),
-          p.clone().addScaledVector(right, -largura / 2).addScaledVector(rUp, espess / 2),
-        ];
-        for (const v of c) pos.push(v.x, v.y, v.z);
-      }
-      for (let i = 0; i < N; i++) {
-        const a = i * 4, b = (i + 1) * 4;
-        for (let k = 0; k < 4; k++) {
-          const k2 = (k + 1) % 4;
-          idx.push(a + k, b + k, a + k2, a + k2, b + k, b + k2);
-        }
-      }
-      const g = new THREE.BufferGeometry();
-      g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-      g.setIndex(idx);
-      g.computeVertexNormals();
-      return g;
-    }
-
-    // cinta longa: sai da esquerda, contorna e vem até a fivela
-    fita.add(new THREE.Mesh(ribbon([
-      [-1.9, -.6, 0], [-2.9, -.85, .3], [-3.3, .3, .28], [-2.7, 1.35, .05],
-      [-1.5, 1.95, -.18], [.2, 2.05, -.25], [1.5, 1.8, -.2],
-    ], FAIXA_W, FAIXA_T, 28), webbing));
-    // cinta curta: da direita até a fivela
-    fita.add(new THREE.Mesh(ribbon([
-      [1.9, -.6, 0], [2.6, -.5, .26], [2.85, .45, .2], [2.35, 1.25, -.08], [1.85, 1.72, -.18],
-    ], FAIXA_W, FAIXA_T, 20), webbing));
-    // fivela de liberação rápida (pequena, onde as duas cintas se unem)
-    const fivela = new THREE.Group();
-    const corpoFiv = new THREE.Mesh(roundedBox(.82, .62, .3, .08, .035), std(0x232323, .62, .1));
-    fivela.add(corpoFiv);
-    const fenda = new THREE.Mesh(new THREE.BoxGeometry(.86, .14, .34), std(0x000000, 1, 0));
-    fenda.position.y = .04; fivela.add(fenda);
-    const trava = new THREE.Mesh(roundedBox(.4, .44, .27, .06, .025), std(0x2c2c2c, .58, .12));
-    trava.position.set(-.42, 0, 0); fivela.add(trava);
-    fivela.position.set(1.7, 1.78, -.2);
-    fivela.rotation.set(.1, -.22, .3);
-    fita.add(fivela);
-    fita.rotation.set(-.05, 0, 0);
-    root.add(fita);
-
     // ---------- luzes ----------
     scene.add(new THREE.AmbientLight(0xffffff, 1.05));
     const key = new THREE.DirectionalLight(0xffffff, 2.6);
@@ -190,14 +126,13 @@
     spot.position.set(.4, 1.2, 3.6); scene.add(spot);
 
     // grupos na ordem dos passos
-    const groups = [caixa, interno, fita, bateria];
-    const nomes = ["caixa", "interno", "fita", "bateria"];
+    const groups = [caixa, interno, bateria];
 
     let focus = -1;
     window.__collarFocus = i => {
       focus = i;
-      // passos 2 (sensores) e 4 (bateria) abrem a caixa em radiografia
-      const xray = (i === 1 || i === 3);
+      // passos 2 (sensores) e 3 (bateria) abrem a caixa em radiografia
+      const xray = (i === 1 || i === 2);
       const soSensores = i === 1;
       corpo.material.transparent = xray;
       corpo.material.opacity = xray ? .17 : 1;
