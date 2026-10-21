@@ -24,7 +24,7 @@ Sensores + IA acompanham cada animal 24h e viram um **índice de bem-estar de 1 
 |---|---|
 | 📊 Dashboard em tempo real | dial, ruminação, alertas, cio, gráfico + simulador (Supabase Realtime) |
 | 🧮 Calculadora de ROI | sliders → R$/ano na hora |
-| 🐄 Coleira 3D | Wemos + MPU6050 + MAX30102 em Three.js |
+| 🐄 Coleira | Wemos + MPU6050 + MAX30102 |
 | 📝 Leads | formulário → Supabase + WhatsApp pronto |
 
 ## Cenas do espetáculo
@@ -47,7 +47,7 @@ flowchart LR
 
 ## Bastidores
 
-`index.html` (o palco) · `dashboard.html` (o painel) · `app.js` + `styles.css` (luz e som) · `js/collar3d.js` (o adereço) · `supabase-*` (o banco) · `api/health.js` (o ponto).
+`index.html` (o palco) · `dashboard.html` (o painel) · `app.js` + `styles.css` (luz e som) · `js/db.js` (a ponte) · `supabase-*` (o banco) · `api/health.js` (o ponto).
 
 ```bash
 git clone https://github.com/Wagner-Schemmer/databov-v2.git
