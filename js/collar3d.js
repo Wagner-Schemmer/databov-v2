@@ -24,8 +24,8 @@
     const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(42, 1, .1, 100);
-    cam.position.set(0, .3, 4.3);
-    cam.lookAt(0, .05, 0);
+    cam.position.set(0, .2, 5.9);
+    cam.lookAt(0, 0, 0);
     const renderer = new THREE.WebGLRenderer({ canvas: mount, alpha: true, antialias: true });
     const root = new THREE.Group();
     scene.add(root);
