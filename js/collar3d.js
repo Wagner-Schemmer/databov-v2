@@ -25,8 +25,8 @@
     const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(42, 1, .1, 100);
-    cam.position.set(0, 1.6, 11.5);
-    cam.lookAt(0, .5, 0);
+    cam.position.set(0, 1.0, 7.8);
+    cam.lookAt(0, .45, 0);
     const renderer = new THREE.WebGLRenderer({ canvas: mount, alpha: true, antialias: true });
     const root = new THREE.Group();
     scene.add(root);
@@ -61,12 +61,12 @@
     // ---------- 1. CAIXA (preta, 3D impressa) ----------
     const caixa = new THREE.Group();
     const W = 3.8, H = 2.8, D = .72;
-    const corpo = new THREE.Mesh(roundedBox(W, H, D, .22, .07), std(0x141414, .88, .05));
+    const corpo = new THREE.Mesh(roundedBox(W, H, D, .22, .07), std(0x1e1e1e, .8, .06));
     caixa.add(corpo);
     // relevo das bordas (camadas de impressão)
     for (let i = 0; i < 3; i++) {
       const linha = new THREE.Mesh(roundedBox(W - .02 - i * .012, H - .02 - i * .012, D - .02, .22, .03),
-        std(0x1d1d1d, .95, .02));
+        std(0x272727, .92, .03));
       linha.position.z = .001 * i;
       caixa.add(linha);
     }
@@ -125,7 +125,7 @@
 
     // ---------- 4. FITA + FIVELA ----------
     const fita = new THREE.Group();
-    const webbing = std(0x121212, .92, .02);
+    const webbing = std(0x1b1b1b, .88, .03);
     // lado direito: da caixa até a fivela
     const dir = new THREE.Mesh(ribbon([
       [1.85, -.55, 0], [2.8, -.7, .25], [3.6, .0, .2], [3.9, 1.0, -.1], [3.55, 1.75, -.25], [2.7, 1.95, -.2],
@@ -154,13 +154,16 @@
     root.add(fita);
 
     // ---------- luzes ----------
-    scene.add(new THREE.AmbientLight(0xffffff, 1.0));
-    const key = new THREE.DirectionalLight(0xffffff, 2.0);
-    key.position.set(4, 6, 6); scene.add(key);
-    const rim = new THREE.DirectionalLight(0xc8f04a, 1.25);
-    rim.position.set(-6, -1, -4); scene.add(rim);
-    const fill = new THREE.DirectionalLight(0xffffff, .7);
-    fill.position.set(-3, 3, 4); scene.add(fill);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.45));
+    const key = new THREE.DirectionalLight(0xffffff, 2.8);
+    key.position.set(4, 6, 7); scene.add(key);
+    const rim = new THREE.DirectionalLight(0xc8f04a, 1.9);
+    rim.position.set(-6, -1, -5); scene.add(rim);
+    const fill = new THREE.DirectionalLight(0xffffff, 1.1);
+    fill.position.set(-4, 3, 5); scene.add(fill);
+    // foco suave no logo (frente da caixa)
+    const spot = new THREE.PointLight(0xffffff, 14, 14, 2);
+    spot.position.set(0, 1.6, 4.2); scene.add(spot);
 
     // grupos na ordem dos passos
     const groups = [caixa, interno, fita, bateria];
