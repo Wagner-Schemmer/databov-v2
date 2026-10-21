@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Product","name":"DataBov","description":"Monitoramento comportamental e certificação de bem-estar animal.","brand":{"@type":"Brand","name":"DataBov"}}
 </script>
@@ -73,6 +73,27 @@
   <div class="marquee"><div class="marquee-track"><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span><span>Detecção de cio · Estresse térmico · Claudicação · Certificação 1–5 · Compost Barn · Freestall · Compliance UE ·&nbsp;</span></div></div>
 </section>
 
+<section id="coleira3d" class="section dark">
+  <div class="wrap">
+    <p class="kicker">Por dentro da coleira</p>
+    <h2>Uma caixa. <em>Todos os ângulos.</em></h2>
+    <p class="mut">Arraste para girar — a rolagem também gira. Toque nos passos:</p>
+    <div class="demo-btns" id="collarSteps">
+      <button class="chip on">1 · Caixa</button>
+      <button class="chip">2 · Sensores</button>
+      <button class="chip">3 · Fita e fivela</button>
+      <button class="chip">4 · Bateria</button>
+    </div>
+    <canvas id="collar3d"></canvas>
+    <div class="card" id="collarCard"><h3 id="stepTitle">1 · Caixa</h3><p id="stepDesc"></p></div>
+    <div class="grid3" id="collarFallback" style="display:none">
+      <div class="card"><h3>1 · Caixa</h3><p>Impressa em 3D, preta, fechada contra poeira e água.</p></div>
+      <div class="card"><h3>2 · Sensores</h3><p>MPU6050 (6 eixos) + MAX30102 (oximetria e FC) no mesmo I2C.</p></div>
+      <div class="card"><h3>3 · Fita e fivela</h3><p>Nylon 25mm com fivela de liberação rápida, ajuste no curral.</p></div>
+      <div class="card"><h3>4 · Bateria</h3><p>2 células 18650 em paralelo (1S2P) com TP4056.</p></div>
+    </div>
+  </div>
+</section>
 <section id="solucao" class="section wrap">
   <p class="kicker">A solução</p>
   <h2>Comportamento vira dado. <em>Dado vira decisão.</em></h2>
@@ -194,5 +215,6 @@
 <script src="supabase-config.js?v=3"></script>
 <script src="js/db.js?v=3"></script>
 <script src="app.js?v=7"></script>
+<script src="js/collar3d.js?v=4"></script>
 </body>
 </html>
